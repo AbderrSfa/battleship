@@ -5,18 +5,23 @@ import { randomMaps } from '../helpers/randomMaps';
 
 import ocean from '../../public/ocean.png';
 import explosion from '../../public/explosion.png';
+import ship from '../../public/ship.png';
 import Image from 'next/image';
 
+const myFleet = randomMaps[Math.floor(Math.random() * 2)]!;
+const enemyShips: number[][] = JSON.parse(
+	JSON.stringify(randomMaps[Math.floor(Math.random() * 2)]!)
+);
+
 const Home: NextPage = () => {
-	const [battlefield, setBattlefield] = useState(
-		randomMaps[Math.floor(Math.random() * 6)]!
-	);
+	const [enemyFleet, setEnemyFleet] = useState(enemyShips);
+
 	const handleClick = (y: number, x: number) => {
-		const newBattlefield = [...battlefield];
-		if (battlefield[y]![x] === 0) newBattlefield[y]![x] = 3;
-		else if (battlefield[y]![x] === 1) newBattlefield[y]![x] = 2;
-		setBattlefield(newBattlefield);
-		if (!battlefield.flat().find((element) => element === 1)) alert('You win');
+		const newEnemyFleet = [...enemyFleet];
+		if (enemyFleet[y]![x] === 0) newEnemyFleet[y]![x] = 3;
+		else if (enemyFleet[y]![x] === 1) newEnemyFleet[y]![x] = 2;
+		setEnemyFleet(newEnemyFleet);
+		if (!enemyFleet.flat().find((element) => element === 1)) alert('You win');
 	};
 
 	return (
@@ -27,21 +32,44 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/battleship-icon.png" />
 			</Head>
 
-			<main className="container mx-auto flex min-h-screen flex-col items-center justify-center">
-				<section className="grid-rows-10 grid grid-cols-10 gap-2 bg-black p-2">
-					{battlefield.map((row, y) => {
+			<main className="container mx-auto flex min-h-screen flex-col items-center justify-center gap-4">
+				<section className="grid-rows-10 grid grid-cols-10 gap-0.5 bg-black p-2">
+					{myFleet.map((row) => {
 						return row.map((square, x) => {
-							let color;
 							let status = 0;
-							if (square === 0 || square === 1) {
-								color = 'slate';
-							} else if (square === 2) {
-								status = 2;
-								color = 'red';
-							} else if (square === 3) {
-								status = 1;
-								color = 'sky';
-							}
+							if (square === 1) status = 1;
+
+							return (
+								<button
+									key={x}
+									className={`h-10 w-10 cursor-default bg-slate-500`}
+								>
+									{status === 0 ? (
+										<Image
+											src={ocean}
+											alt="ocean sprite"
+											width={40}
+											height={40}
+										/>
+									) : (
+										<Image
+											src={ship}
+											alt="ship sprite"
+											width={40}
+											height={40}
+										/>
+									)}
+								</button>
+							);
+						});
+					})}
+				</section>
+				<section className="grid-rows-10 grid grid-cols-10 gap-0.5 bg-black p-2">
+					{enemyFleet.map((row, y) => {
+						return row.map((square, x) => {
+							let status = 0;
+							if (square === 2) status = 2;
+							else if (square === 3) status = 1;
 
 							return (
 								<button
