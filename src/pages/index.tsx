@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { randomMaps } from '../helpers/randomMaps';
+import randomMaps from '../helpers/randomMaps';
 import { Socket, io } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
@@ -14,9 +14,12 @@ const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io();
 
 const Home: NextPage = () => {
 	const [enemyFleet, setEnemyFleet] = useState<number[][]>([]);
-	const [myFleet, setMyFleet] = useState<number[][]>(randomMaps[myFleetIndex]!);
+	const [myFleet, setMyFleet] = useState<number[][]>(
+		randomMaps[myFleetIndex] || []
+	);
 	const [showGame, setShowGame] = useState(false);
 	const [myTurn, setMyTurn] = useState(true);
+	const [errorMessage, setErrorMessage] = useState(false);
 
 	useEffect(() => {
 		const socketInit = async () => {
@@ -34,10 +37,12 @@ const Home: NextPage = () => {
 		if (myFleet.length > 1) {
 			const newMyFleet = [...myFleet];
 			if (myFleet[y]![x] === 1) newMyFleet[y]![x] = 2;
+			else if (myFleet[y]![x] === 0) newMyFleet[y]![x] = 3;
 			setMyFleet(newMyFleet);
 			if (!myFleet.flat().find((element) => element === 1)) alert('You Lose');
 		}
 		setMyTurn(true);
+		setErrorMessage(false);
 	});
 
 	const handleStart = () => {
@@ -56,8 +61,8 @@ const Home: NextPage = () => {
 				if (!enemyFleet.flat().find((element) => element === 1))
 					alert('You win');
 			}
-		}
-		setMyTurn(false);
+			setMyTurn(false);
+		} else setErrorMessage(true);
 	};
 
 	return (
@@ -75,10 +80,15 @@ const Home: NextPage = () => {
 						<MyFleet myFleet={myFleet} />
 						<h1 className="text-2xl uppercase">enemy fleet</h1>
 						<EnemyFleet enemyFleet={enemyFleet} handleClick={handleClick} />
+						{errorMessage && (
+							<div className="border-16 rounded-sm border-red-700 bg-red-200 px-4 py-2">
+								<p className="font-sans text-red-600">Not your turn</p>
+							</div>
+						)}
 					</>
 				) : (
 					<>
-						<h1 className="text-8xl uppercase">battleship</h1>
+						<h1 className="font-saira text-8xl uppercase">battleship</h1>
 						<button
 							className="rounded-full bg-sky-500 py-4 px-8 text-4xl font-bold uppercase shadow-lg"
 							onClick={handleStart}

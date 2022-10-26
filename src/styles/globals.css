@@ -2,16 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-	@font-face {
-		font-family: 'Saira-Stencil-One';
-		src: url('/fonts/Saira-Stencil-One-Regular.woff2') format(woff2);
-		font-weight: 400;
-		font-display: swap;
-		font-style: normal;
-	}
-}
-
 html,
 body,
 div,
@@ -140,4 +130,5 @@ table {
 
 body {
 	background-color: #f1f5f9;
+	font-family: 'Saira Stencil One'
 }

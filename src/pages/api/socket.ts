@@ -2,12 +2,13 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Server } from 'socket.io';
 
 export default function socketHandler(
-	req: NextApiRequest,
+	_req: NextApiRequest,
 	res: NextApiResponse
 ) {
-	if (!res.socket?.server.io) {
-		const io = new Server(res.socket?.server);
-		res.socket!.server.io = io;
+	const sockettype: any = res.socket;
+	if (!sockettype?.server.io) {
+		const io = new Server(sockettype?.server);
+		sockettype.server.io = io;
 
 		io.on('connection', (socket) => {
 			socket.on('send-field', (index) => {

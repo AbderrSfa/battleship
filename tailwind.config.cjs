@@ -2,11 +2,7 @@
 module.exports = {
 	content: ['./src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
-		extend: {
-			fontFamily: {
-				saira: 'Saira Stencil One, cursive',
-			},
-		},
+		extend: {},
 	},
 	plugins: [],
 };

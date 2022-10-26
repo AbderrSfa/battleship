@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
-import ocean from '../../public/images/ocean.png';
-import explosion from '../../public/images/explosion.png';
+import ocean from '../../public/ocean.png';
+import explosion from '../../public/explosion.png';
 
 type Props = {
 	enemyFleet: number[][];
