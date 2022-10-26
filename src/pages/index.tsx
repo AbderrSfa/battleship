@@ -8,7 +8,7 @@ import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 import MyFleet from '../components/MyFleet';
 import EnemyFleet from '../components/EnemyFleet';
 
-const myFleetIndex = Math.floor(Math.random() * 5);
+const myFleetIndex = Math.floor(Math.random() * 9);
 
 const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io();
 
